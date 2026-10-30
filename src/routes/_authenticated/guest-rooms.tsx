@@ -38,18 +38,18 @@ function GuestRooms() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!hallId) return toast.error("Choose a hall");
+    if (!hallId) { toast.error("Choose a hall"); return; }
     const { error } = await supabase.from("guest_bookings").insert({
       student_id: me!.user.id, hall_id: hallId, guest_name: guest, start_date: start, end_date: end,
     });
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Request sent to the hall manager");
     setGuest("");
     refresh();
   }
   async function decide(id: string, status: "approved" | "rejected") {
     const { error } = await supabase.from("guest_bookings").update({ status }).eq("id", id);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success(status === "approved" ? "Guest room approved" : "Request rejected");
     refresh();
   }

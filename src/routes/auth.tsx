@@ -43,7 +43,7 @@ function AuthPage() {
       password: String(f.get("password")),
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     navigate({ to: "/dashboard" });
   }
 
@@ -60,23 +60,23 @@ function AuthPage() {
       },
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setCheckEmail(true);
   }
 
   async function forgot() {
     const email = (document.getElementById("si-email") as HTMLInputElement)?.value;
-    if (!email) return toast.error("Type your email first");
+    if (!email) { toast.error("Type your email first"); return; }
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Password reset link sent to your email");
   }
 
   async function social(provider: "google" | "lovable") {
     const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin + "/auth" });
-    if (result.error) return toast.error(String(result.error.message ?? result.error));
+    if (result.error) { toast.error(String(result.error.message ?? result.error)); return; }
     if (result.redirected) return;
     navigate({ to: "/dashboard" });
   }

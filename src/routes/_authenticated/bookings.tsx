@@ -51,25 +51,25 @@ function Bookings() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!hallId) return toast.error("Choose a hall");
+    if (!hallId) { toast.error("Choose a hall"); return; }
     const { error } = await supabase.from("hall_bookings").insert({
       user_id: me!.user.id, hall_id: hallId, booking_date: date, start_time: start, end_time: end,
       purpose, attendance: Number(people),
     });
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Booking request submitted — waiting for approval");
     setPurpose("");
     refresh();
   }
   async function decide(id: string, status: "approved" | "rejected") {
     const { error } = await supabase.from("hall_bookings").update({ status }).eq("id", id);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success(status === "approved" ? "Booking approved" : "Booking rejected");
     refresh();
   }
   async function cancel(id: string) {
     const { error } = await supabase.from("hall_bookings").delete().eq("id", id);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     refresh();
   }
 
