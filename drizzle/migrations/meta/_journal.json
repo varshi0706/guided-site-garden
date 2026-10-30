@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793402302953,
+      "tag": "0000_hall_management_schema",
+      "breakpoints": true
+    }
+  ]
 }
