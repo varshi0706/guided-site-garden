@@ -41,14 +41,14 @@ function Requests() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (kind === "change" && !hallId) return toast.error("Choose the hall you want");
-    if (kind === "swap" && !roll.trim()) return toast.error("Enter the other student's roll number");
+    if (kind === "change" && !hallId) { toast.error("Choose the hall you want"); return; }
+    if (kind === "swap" && !roll.trim()) { toast.error("Enter the other student's roll number"); return; }
     const { error } = await supabase.from("change_requests").insert({
       student_id: me!.user.id, kind, reason,
       desired_hall_id: kind === "change" ? hallId : null,
       swap_with_roll_no: kind === "swap" ? roll.trim() : null,
     });
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Application submitted");
     setReason(""); setRoll("");
     refresh();
@@ -57,14 +57,14 @@ function Requests() {
   async function approve(r: { id: string; kind: string }) {
     const res = r.kind === "swap"
       ? await supabase.rpc("approve_swap", { _request_id: r.id })
-      : await supabase.rpc("approve_hall_change", { _request_id: r.id, _room_id: roomPick[r.id] });
-    if (res.error) return toast.error(errMsg(res.error));
+      : await supabase.rpc("approve_hall_change", { _request_id: r.id, _room_id: roomPick[r.id] ?? "" });
+    if (res.error) { toast.error(errMsg(res.error)); return; }
     toast.success("Approved and rooms updated");
     refresh();
   }
   async function reject(id: string) {
     const { error } = await supabase.from("change_requests").update({ status: "rejected" }).eq("id", id);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     refresh();
   }
 

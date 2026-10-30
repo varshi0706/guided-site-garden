@@ -48,14 +48,14 @@ function Complaints() {
     const { error } = await supabase.from("complaints").insert({
       student_id: me!.user.id, category, title, description: desc, hall_id: hallId || null,
     });
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Complaint submitted to the hall manager");
     setTitle(""); setDesc("");
     refresh();
   }
   async function setStatus(id: string, status: string) {
     const { error } = await supabase.from("complaints").update({ status }).eq("id", id);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     refresh();
   }
 

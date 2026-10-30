@@ -24,7 +24,7 @@ function Dues() {
 
   async function markPaid(id: string) {
     const { error } = await supabase.from("dues").update({ paid: true }).eq("id", id);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Marked as paid");
     qc.invalidateQueries({ queryKey: ["dues"] });
   }
